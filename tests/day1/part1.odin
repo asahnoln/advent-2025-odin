@@ -63,3 +63,36 @@ count_zeroes :: proc(t: ^testing.T) {
 
 	testing.expect_value(t, got, 2)
 }
+
+@(test)
+parse_cmd :: proc(t: ^testing.T) {
+	tests := []struct {
+		cmd:  string,
+		want: day1.Cmd,
+	} {
+		{"L40", {.Left, 40}}, //
+		{"R50", {.Right, 50}},
+	}
+
+	for tt in tests {
+		got, err := day1.parse_cmd(tt.cmd)
+		testing.expectf(t, err == nil, "parsed %q: err %v, want nil", tt.cmd, err)
+		testing.expectf(t, got == tt.want, "parsed %q: got %v, want %v", tt.cmd, got, tt.want)
+	}
+}
+
+@(test)
+parse_cmd_err :: proc(t: ^testing.T) {
+	tests := []struct {
+		cmd:  string,
+		want: day1.Parse_Error,
+	} {
+		{"X40", {d = 'X', msg = "wrong direction"}}, //
+		{"Llol", {n = "lol", msg = "wrong count"}}, //
+	}
+
+	for tt in tests {
+		_, err := day1.parse_cmd(tt.cmd)
+		testing.expectf(t, err == tt.want, "parsed %q: got err %v, want %v", tt.cmd, err, tt.want)
+	}
+}
