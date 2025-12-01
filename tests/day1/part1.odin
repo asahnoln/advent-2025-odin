@@ -1,5 +1,6 @@
 package day1_test
 
+import "core:slice"
 import "core:testing"
 import "src:day1"
 
@@ -94,5 +95,29 @@ parse_cmd_err :: proc(t: ^testing.T) {
 	for tt in tests {
 		_, err := day1.parse_cmd(tt.cmd)
 		testing.expectf(t, err == tt.want, "parsed %q: got err %v, want %v", tt.cmd, err, tt.want)
+	}
+}
+
+@(test)
+parse_cmds :: proc(t: ^testing.T) {
+	tests := []struct {
+		input: string,
+		want:  []day1.Cmd,
+	} {
+		{"R50\nL40", {{.Right, 50}, {.Left, 40}}}, //
+	}
+
+	for tt in tests {
+		got, err := day1.parse_cmds(tt.input)
+
+		testing.expectf(t, err == nil, "parsed %q: err %v, want nil", tt.input, err)
+		testing.expectf(
+			t,
+			slice.equal(got, tt.want),
+			"parsed %q: got %v, want %v",
+			tt.input,
+			got,
+			tt.want,
+		)
 	}
 }

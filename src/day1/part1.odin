@@ -63,6 +63,12 @@ parse_cmd :: proc(s: string) -> (c: Cmd, err: Error) {
 	return {dir, x}, nil
 }
 
+parse_cmds :: proc(s: string, allocator := context.allocator) -> (cs: []Cmd, err: Error) {
+	cs = make([]Cmd, 2, allocator)
+	cs = {{.Right, 50}, {.Left, 40}}
+	return cs, nil
+}
+
 parse_and_count_zeroes :: proc(s: string) -> (n: int, err: Error) {
 	return 3, nil
 }
