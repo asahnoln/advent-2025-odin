@@ -73,6 +73,7 @@ parse_cmd :: proc(t: ^testing.T) {
 	} {
 		{"L40", {.Left, 40}}, //
 		{"R50", {.Right, 50}},
+		{" L30 ", {.Left, 30}}, //
 	}
 
 	for tt in tests {
@@ -105,6 +106,7 @@ parse_cmds :: proc(t: ^testing.T) {
 		want:  []day1.Cmd,
 	} {
 		{"R5\nL40", {{.Right, 5}, {.Left, 40}}}, //
+		{" \n R1 \n L10\n ", {{.Right, 1}, {.Left, 10}}}, //
 	}
 
 	for tt in tests {

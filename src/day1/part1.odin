@@ -49,6 +49,8 @@ count_zeroes :: proc(start: int, turns: []Cmd) -> (n: int) {
 }
 
 parse_cmd :: proc(s: string) -> (c: Cmd, err: Error) {
+	s := strings.trim_space(s)
+
 	dir: Direction = .Left
 	switch d := utf8.rune_at_pos(s, 0); d {
 	case 'L':
@@ -69,7 +71,7 @@ parse_cmd :: proc(s: string) -> (c: Cmd, err: Error) {
 }
 
 parse_cmds :: proc(s: string, allocator := context.allocator) -> (cmds: []Cmd, err: Error) {
-	ls := strings.split_lines(s, allocator)
+	ls := strings.split_lines(strings.trim_space(s), allocator)
 	defer delete(ls)
 
 	cmds = make([]Cmd, len(ls))
