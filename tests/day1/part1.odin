@@ -42,7 +42,7 @@ turn_dial :: proc(t: ^testing.T) {
 	}
 
 	for tt in tests {
-		got := day1.turn_dial(tt.start, tt.dir, tt.n)
+		got, _ := day1.turn_dial(tt.start, tt.dir, tt.n)
 
 		testing.expectf(
 			t,
@@ -59,7 +59,7 @@ turn_dial :: proc(t: ^testing.T) {
 
 @(test)
 count_zeroes :: proc(t: ^testing.T) {
-	got := day1.count_zeroes(
+	got, _ := day1.count_zeroes(
 		50,
 		{
 			{.Left, 50}, // 0

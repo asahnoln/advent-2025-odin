@@ -19,3 +19,36 @@ L82`)
 	testing.expect(t, err == nil)
 	testing.expect_value(t, n, 6)
 }
+
+@(test)
+turn_dial_zero_count :: proc(t: ^testing.T) {
+	tests := []struct {
+		start: int,
+		dir:   day1.Direction,
+		n:     int,
+		want:  int,
+	} {
+		{50, .Left, 10, 0}, //
+		{50, .Left, 60, 1},
+		{50, .Right, 60, 1},
+		{50, .Right, 1000, 10},
+		{1, .Left, 1, 1},
+		{99, .Right, 1, 1},
+		{0, .Left, 1, 0},
+	}
+
+	for tt in tests {
+		_, got := day1.turn_dial(tt.start, tt.dir, tt.n)
+
+		testing.expectf(
+			t,
+			got == tt.want,
+			"from %d turn %v %d clicks: got %d, want %d",
+			tt.start,
+			tt.dir,
+			tt.n,
+			got,
+			tt.want,
+		)
+	}
+}

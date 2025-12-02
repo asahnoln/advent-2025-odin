@@ -1,5 +1,6 @@
 package day1
 
+import "core:math"
 import "core:strconv"
 import "core:strings"
 import "core:unicode/utf8"
@@ -32,20 +33,34 @@ Cmd :: struct {
 
 MAX_DIAL :: 100
 
-turn_dial :: proc(start: int, d: Direction, c: int) -> (n: int) {
-	return (start + (d == .Left ? -1 : 1) * c) %% MAX_DIAL
+// turn_dial returns new n after turning from start position c times in given direction.
+// It returns how many times dial crossed zero as z
+turn_dial :: proc(start: int, d: Direction, c: int) -> (n: int, z: int) {
+	x := start + (d == .Left ? -1 : 1) * c
+
+	// TODO: Can I find a better math solution?
+	if x <= 0 && start != 0 {
+		z = 1
+	}
+	if x <= 0 || x >= MAX_DIAL {
+		z += x / MAX_DIAL
+	}
+
+	return x %% MAX_DIAL, z
 }
 
-count_zeroes :: proc(start: int, turns: []Cmd) -> (n: int) {
+count_zeroes :: proc(start: int, turns: []Cmd) -> (n: int, z: int) {
 	c := start
+	cz := 0
 	for t in turns {
-		c = turn_dial(c, t.d, t.c)
+		c, cz = turn_dial(c, t.d, t.c)
 
+		z += cz
 		if c == 0 {
 			n += 1
 		}
 	}
-	return n
+	return n, z
 }
 
 parse_cmd :: proc(s: string) -> (c: Cmd, err: Error) {
@@ -91,6 +106,6 @@ parse_and_count_zeroes :: proc(s: string, allocator := context.allocator) -> (n:
 	cmds = parse_cmds(s, allocator) or_return
 	defer delete(cmds)
 
-	n = count_zeroes(50, cmds)
+	n, _ = count_zeroes(50, cmds)
 	return
 }
