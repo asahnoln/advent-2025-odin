@@ -33,6 +33,8 @@ Cmd :: struct {
 
 MAX_DIAL :: 100
 
+START_AT :: 50
+
 // turn_dial returns new n after turning from start position c times in given direction.
 // It returns how many times dial crossed zero as z
 turn_dial :: proc(start: int, d: Direction, c: int) -> (n: int, z: int) {
@@ -101,11 +103,27 @@ parse_cmds :: proc(s: string, allocator := context.allocator) -> (cmds: []Cmd, e
 	return cmds, nil
 }
 
-parse_and_count_zeroes :: proc(s: string, allocator := context.allocator) -> (n: int, err: Error) {
+@(private)
+parse_and_count_zeroes_base :: proc(
+	s: string,
+	callback: proc(n, z: int) -> int,
+	allocator := context.allocator,
+) -> (
+	n: int,
+	err: Error,
+) {
 	cmds: []Cmd
 	cmds = parse_cmds(s, allocator) or_return
 	defer delete(cmds)
 
-	n, _ = count_zeroes(50, cmds)
-	return
+	z: int
+	n, z = count_zeroes(START_AT, cmds)
+
+	return callback(n, z), nil
+}
+
+parse_and_count_zeroes :: proc(s: string, allocator := context.allocator) -> (n: int, err: Error) {
+	return parse_and_count_zeroes_base(s, proc(n, z: int) -> int {
+			return n
+		}, allocator)
 }

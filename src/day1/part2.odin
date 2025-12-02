@@ -7,10 +7,7 @@ parse_and_count_zeroes_part2 :: proc(
 	n: int,
 	err: Error,
 ) {
-	cmds: []Cmd
-	cmds = parse_cmds(s, allocator) or_return
-	defer delete(cmds)
-
-	_, n = count_zeroes(50, cmds)
-	return
+	return parse_and_count_zeroes_base(s, proc(n, z: int) -> int {
+			return z
+		}, allocator)
 }
