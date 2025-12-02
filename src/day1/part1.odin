@@ -78,6 +78,7 @@ parse_cmds :: proc(s: string, allocator := context.allocator) -> (cmds: []Cmd, e
 	for l, i in ls {
 		cmds[i], err = parse_cmd(l)
 		if err != nil {
+			delete(cmds)
 			return cmds, Parse_Line_Error{i, err.(Parse_Cmd_Error)}
 		}
 	}
@@ -85,6 +86,11 @@ parse_cmds :: proc(s: string, allocator := context.allocator) -> (cmds: []Cmd, e
 	return cmds, nil
 }
 
-parse_and_count_zeroes :: proc(s: string) -> (n: int, err: Error) {
-	return 3, nil
+parse_and_count_zeroes :: proc(s: string, allocator := context.allocator) -> (n: int, err: Error) {
+	cmds: []Cmd
+	cmds = parse_cmds(s, allocator) or_return
+	defer delete(cmds)
+
+	n = count_zeroes(50, cmds)
+	return
 }

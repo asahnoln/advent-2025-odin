@@ -5,7 +5,7 @@ import "core:testing"
 import "src:day1"
 
 @(test)
-counts_zeroes :: proc(t: ^testing.T) {
+parse_and_count_zeroes :: proc(t: ^testing.T) {
 	n, err := day1.parse_and_count_zeroes(`
 L68
 L30
@@ -16,9 +16,15 @@ L55
 L1
 L99
 R14
-L82`[1:])
+L82`)
 	testing.expect(t, err == nil)
 	testing.expect_value(t, n, 3)
+}
+
+@(test)
+parse_and_count_zeroes_error :: proc(t: ^testing.T) {
+	_, err := day1.parse_and_count_zeroes("S U P E R W R O N G")
+	testing.expect(t, err != nil)
 }
 
 @(test)
@@ -127,8 +133,7 @@ parse_cmds :: proc(t: ^testing.T) {
 
 @(test)
 parse_cmds_error :: proc(t: ^testing.T) {
-	got, err := day1.parse_cmds("L50\nWRONG")
-	defer delete(got)
+	_, err := day1.parse_cmds("L50\nWRONG")
 
 	testing.expect_value(
 		t,
