@@ -49,10 +49,10 @@ count_zeroes :: proc(start: int, turns: []Cmd) -> (n: int) {
 }
 
 parse_cmd :: proc(s: string) -> (c: Cmd, err: Error) {
-	s := strings.trim_space(s)
+	str := strings.trim_space(s)
 
 	dir: Direction = .Left
-	switch d := utf8.rune_at_pos(s, 0); d {
+	switch d := utf8.rune_at_pos(str, 0); d {
 	case 'L':
 		dir = .Left
 	case 'R':
@@ -61,7 +61,7 @@ parse_cmd :: proc(s: string) -> (c: Cmd, err: Error) {
 		return c, Parse_Cmd_Error{d = d, msg = "wrong direction"}
 	}
 
-	n := s[1:]
+	n := str[1:]
 	x, ok := strconv.parse_int(n, 10)
 	if !ok {
 		return c, Parse_Cmd_Error{n = n, msg = "wrong count"}
