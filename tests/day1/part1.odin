@@ -86,7 +86,7 @@ parse_cmd :: proc(t: ^testing.T) {
 parse_cmd_err :: proc(t: ^testing.T) {
 	tests := []struct {
 		cmd:  string,
-		want: day1.Parse_Error,
+		want: day1.Parse_Cmd_Error,
 	} {
 		{"X40", {d = 'X', msg = "wrong direction"}}, //
 		{"Llol", {n = "lol", msg = "wrong count"}}, //
@@ -104,11 +104,12 @@ parse_cmds :: proc(t: ^testing.T) {
 		input: string,
 		want:  []day1.Cmd,
 	} {
-		{"R50\nL40", {{.Right, 50}, {.Left, 40}}}, //
+		{"R5\nL40", {{.Right, 5}, {.Left, 40}}}, //
 	}
 
 	for tt in tests {
 		got, err := day1.parse_cmds(tt.input)
+		defer delete(got)
 
 		testing.expectf(t, err == nil, "parsed %q: err %v, want nil", tt.input, err)
 		testing.expectf(
@@ -120,4 +121,16 @@ parse_cmds :: proc(t: ^testing.T) {
 			tt.want,
 		)
 	}
+}
+
+@(test)
+parse_cmds_error :: proc(t: ^testing.T) {
+	got, err := day1.parse_cmds("L50\nWRONG")
+	defer delete(got)
+
+	testing.expect_value(
+		t,
+		err,
+		day1.Parse_Line_Error{n = 1, err = {d = 'W', msg = "wrong direction"}},
+	)
 }

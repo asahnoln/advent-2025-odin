@@ -1,18 +1,23 @@
 package day1
 
-import "core:fmt"
 import "core:strconv"
 import "core:strings"
 import "core:unicode/utf8"
 
 Error :: union {
-	Parse_Error,
+	Parse_Cmd_Error,
+	Parse_Line_Error,
 }
 
-Parse_Error :: struct {
+Parse_Cmd_Error :: struct {
 	d:   rune,
 	n:   string,
 	msg: string,
+}
+
+Parse_Line_Error :: struct {
+	n:   int,
+	err: Parse_Cmd_Error,
 }
 
 Direction :: enum {
@@ -51,22 +56,31 @@ parse_cmd :: proc(s: string) -> (c: Cmd, err: Error) {
 	case 'R':
 		dir = .Right
 	case:
-		return c, Parse_Error{d = d, msg = "wrong direction"}
+		return c, Parse_Cmd_Error{d = d, msg = "wrong direction"}
 	}
 
 	n := s[1:]
 	x, ok := strconv.parse_int(n, 10)
 	if !ok {
-		return c, Parse_Error{n = n, msg = "wrong count"}
+		return c, Parse_Cmd_Error{n = n, msg = "wrong count"}
 	}
 
 	return {dir, x}, nil
 }
 
-parse_cmds :: proc(s: string, allocator := context.allocator) -> (cs: []Cmd, err: Error) {
-	cs = make([]Cmd, 2, allocator)
-	cs = {{.Right, 50}, {.Left, 40}}
-	return cs, nil
+parse_cmds :: proc(s: string, allocator := context.allocator) -> (cmds: []Cmd, err: Error) {
+	ls := strings.split_lines(s, allocator)
+	defer delete(ls)
+
+	cmds = make([]Cmd, len(ls))
+	for l, i in ls {
+		cmds[i], err = parse_cmd(l)
+		if err != nil {
+			return cmds, Parse_Line_Error{i, err.(Parse_Cmd_Error)}
+		}
+	}
+
+	return cmds, nil
 }
 
 parse_and_count_zeroes :: proc(s: string) -> (n: int, err: Error) {
