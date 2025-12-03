@@ -8,12 +8,10 @@ import "src:day2"
 // TODO: Finish implementation
 full_test :: proc(t: ^testing.T) {
 	s, err := day2.sum_of_invalid_IDs(
-		`11-22,95-115,998-1012,1188511880-1188511890,222220-222224,
-1698522-1698528,446443-446449,38593856-38593862,565653-565659,
-824824821-824824827,2121212118-2121212124`,
+		`11-22,95-115,998-1012,1188511880-1188511890,222220-222224,1698522-1698528,446443-446449,38593856-38593862,565653-565659,824824821-824824827,2121212118-2121212124`,
 	)
 
-	testing.expect(t, err == nil)
+	testing.expectf(t, err == nil, "got err %v; want nil", err)
 	testing.expect_value(t, s, 1227775554)
 }
 
@@ -78,10 +76,9 @@ find_invalid_IDs :: proc(t: ^testing.T) {
 	}
 
 	for tt in tests {
-		got, err := day2.find_invalid_IDs(tt.start, tt.end)
+		got := day2.find_invalid_IDs(tt.start, tt.end)
 		defer delete(got)
 
-		testing.expectf(t, err == nil, "range %d-%d: got err %v; want nil", tt.start, tt.end, err)
 		testing.expectf(
 			t,
 			slice.equal(got, tt.want),

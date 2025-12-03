@@ -2,8 +2,14 @@ package day2
 
 import "core:log"
 import "core:math"
+import "core:slice"
 import "core:strconv"
 import "core:strings"
+
+Find_Range_Error :: enum {
+	None,
+	Start_Is_Bigger_Than_End,
+}
 
 Parse_Range_Error :: union {
 	Dash_Not_Found_Error,
@@ -25,8 +31,29 @@ Parse_Number_Error :: struct {
 }
 
 // TODO: More detailed error
-sum_of_invalid_IDs :: proc(ranges: string) -> (s: int, err: Parse_Range_Error) {
-	s = 1227775554
+sum_of_invalid_IDs :: proc(
+	ranges: string,
+	allocator := context.allocator,
+) -> (
+	s: int,
+	err: Parse_Range_Error,
+) {
+	rs := strings.split(ranges, ",", allocator)
+	defer delete(rs)
+
+	all := make([dynamic]int)
+	defer delete(all)
+
+	for r in rs {
+		x, y := parse_range(r) or_return
+		ids := find_invalid_IDs(x, y)
+		defer delete(ids)
+
+		append(&all, ..ids)
+	}
+
+	s = math.sum(all[:])
+
 	return
 }
 
@@ -52,24 +79,15 @@ parse_number :: proc(val: string, pos: Number_Pos) -> (int, Parse_Range_Error) {
 	return n, nil
 }
 
-// TODO: finish implementation
-find_invalid_IDs :: proc(
-	start: int,
-	end: int,
-	allocator := context.allocator,
-) -> (
-	ids: []int,
-	err: Parse_Range_Error,
-) {
-
+find_invalid_IDs :: proc(start: int, end: int, allocator := context.allocator) -> []int {
+	ids := make([dynamic]int, allocator)
 	for n in start ..= end {
-
+		if is_invalid_id(n) {
+			append(&ids, n)
+		}
 	}
 
-	ids = make([]int, 2)
-	ids[0] = 11
-	ids[1] = 22
-	return
+	return ids[:]
 }
 
 is_invalid_id :: proc(id: int) -> (ok: bool) {
