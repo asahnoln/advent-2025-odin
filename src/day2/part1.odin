@@ -1,8 +1,6 @@
 package day2
 
-import "core:log"
 import "core:math"
-import "core:slice"
 import "core:strconv"
 import "core:strings"
 
