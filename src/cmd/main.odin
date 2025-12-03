@@ -9,7 +9,7 @@ main :: proc() {
 		fmt.printfln("error reading file: %v", err)
 	}
 
-	n, err2 := day1.parse_and_count_zeroes(string(s))
+	n, err2 := day1.parse_and_count_zeroes_part2(string(s))
 	if err2 != nil {
 		fmt.printfln("error parsing: %v", err2)
 	}

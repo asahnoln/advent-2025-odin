@@ -1,6 +1,5 @@
 package day1
 
-import "core:math"
 import "core:strconv"
 import "core:strings"
 import "core:unicode/utf8"
