@@ -1,5 +1,7 @@
 package day2
 
+import "core:log"
+import "core:math"
 import "core:strconv"
 import "core:strings"
 
@@ -48,4 +50,32 @@ parse_number :: proc(val: string, pos: Number_Pos) -> (int, Parse_Range_Error) {
 	}
 
 	return n, nil
+}
+
+// TODO: finish implementation
+find_invalid_IDs :: proc(
+	start: int,
+	end: int,
+	allocator := context.allocator,
+) -> (
+	ids: []int,
+	err: Parse_Range_Error,
+) {
+
+	for n in start ..= end {
+
+	}
+
+	ids = make([]int, 2)
+	ids[0] = 11
+	ids[1] = 22
+	return
+}
+
+is_invalid_id :: proc(id: int) -> (ok: bool) {
+	p := math.count_digits_of_base(id, 10) / 2
+	ln := cast(int)math.pow10(cast(f64)p)
+	l, r := id / ln, id % ln
+
+	return l == r
 }

@@ -1,5 +1,6 @@
 package day2_test
 
+import "core:slice"
 import "core:testing"
 import "src:day2"
 
@@ -65,4 +66,47 @@ parse_range_error :: proc(t: ^testing.T) {
 		testing.expectf(t, err == tt.err, "parse %q: got err %v; want %v", tt.input, err, tt.err)
 	}
 
+}
+
+@(test)
+find_invalid_IDs :: proc(t: ^testing.T) {
+	tests := []struct {
+		start, end: int,
+		want:       []int,
+	} {
+		{11, 22, {11, 22}}, //
+	}
+
+	for tt in tests {
+		got, err := day2.find_invalid_IDs(tt.start, tt.end)
+		defer delete(got)
+
+		testing.expectf(t, err == nil, "range %d-%d: got err %v; want nil", tt.start, tt.end, err)
+		testing.expectf(
+			t,
+			slice.equal(got, tt.want),
+			"range %d-%d: got %v; want %v",
+			tt.start,
+			tt.end,
+			got,
+			tt.want,
+		)
+	}
+}
+
+@(test)
+is_invalid_id :: proc(t: ^testing.T) {
+	tests := []struct {
+		x:    int,
+		want: bool,
+	} {
+		{1, false}, //
+		{11, true},
+		{123123, true},
+	}
+
+	for i in tests {
+		got := day2.is_invalid_id(i.x)
+		testing.expectf(t, got == i.want, "check_id(%d): got %v; want %v", i.x, got, i.want)
+	}
 }
