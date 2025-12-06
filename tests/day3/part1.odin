@@ -61,22 +61,3 @@ max_jolt_error :: proc(t: ^testing.T) {
 		testing.expectf(t, err == tt.err, "input %q: got err %v; want %v", tt.input, err, tt.err)
 	}
 }
-
-max_jolt_int :: proc(t: ^testing.T) {
-	tests := []struct {
-		input: []int,
-		want:  int,
-	} {
-		{{1, 2}, 12}, //
-		{{1, 2, 3}, 23},
-		{{1, 2, 1, 4}, 24},
-		{{1, 2, 1, 4, 1, 2}, 42},
-	}
-
-	for tt in tests {
-		got, err := day3.max_jolt(tt.input)
-
-		testing.expect(t, err == nil, "got err %v; want nil")
-		testing.expectf(t, got == tt.want, "input %v: got %v; want %v", tt.input, got, tt.want)
-	}
-}

@@ -15,3 +15,5 @@
 - [ ] Proper error handling
 - [ ] Refactor
 - [ ] Refactor with bit manipulation?
+
+### Day 4

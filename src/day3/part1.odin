@@ -1,6 +1,5 @@
 package day3
 
-import "core:log"
 import "core:slice"
 import "core:strconv"
 import "core:strings"
@@ -30,12 +29,7 @@ parse_and_find_jolt_sum :: proc(input: string) -> (sum: int, err: Bank_Error) {
 	return sum, nil
 }
 
-max_jolt :: proc {
-	max_jolt_string,
-	max_jolt_int,
-}
-
-max_jolt_string :: proc(input: string) -> (int, Bank_Error) {
+max_jolt :: proc(input: string) -> (int, Bank_Error) {
 	if l := len(input); l < 2 {
 		return 0, Short_Input_Error{val = input}
 	}
@@ -55,10 +49,4 @@ max_jolt_string :: proc(input: string) -> (int, Bank_Error) {
 	}
 
 	return n, nil
-}
-
-max_jolt_int :: proc(input: []int) -> (n: int, err: Bank_Error) {
-	i := slice.max_index(input[:len(input) - 1])
-	j := slice.max_index(input[i + 1:])
-	return input[i] * 10 + input[i + 1 + j], nil
 }
