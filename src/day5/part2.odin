@@ -1,10 +1,10 @@
 package day5
 
-import "core:strconv"
+import "core:slice"
 import "core:strings"
 import "src:day2"
 
-parse_and_count_fresh_IDs :: proc(
+parse_and_count_ranges_IDs :: proc(
 	input: string,
 	allocator := context.allocator,
 ) -> (
@@ -19,7 +19,6 @@ parse_and_count_fresh_IDs :: proc(
 	rs := make([dynamic][2]int)
 	defer delete(rs)
 
-	i := 0
 	for l in ls {
 		if l == "" {
 			break
@@ -27,24 +26,16 @@ parse_and_count_fresh_IDs :: proc(
 
 		x, y := day2.parse_range(l) or_return
 		append(&rs, [2]int{x, y})
-
-		i += 1
 	}
 
-	for l in ls[i + 1:] {
-		x, _ := strconv.parse_int(l)
+	ids := make(map[int]struct{})
+	defer delete(ids)
 
-		for r in rs {
-			if is_fresh(x, r[0], r[1]) {
-				n += 1
-				break
-			}
+	for r in rs {
+		for i in r[0] ..= r[1] {
+			ids[i] = struct{}{}
 		}
 	}
 
-	return n, nil
-}
-
-is_fresh :: proc(id, from, to: int) -> (ok: bool) {
-	return from <= id && id <= to
+	return len(ids), nil
 }
