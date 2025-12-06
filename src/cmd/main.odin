@@ -10,7 +10,7 @@ main :: proc() {
 		fmt.panicf("error reading file: %v", err)
 	}
 
-	n, err2 := day5.parse_and_count_fresh_IDs(string(s))
+	n, err2 := day5.parse_and_count_ranges_IDs(string(s))
 	if err2 != nil {
 		fmt.panicf("error parsing: %v", err2)
 	}

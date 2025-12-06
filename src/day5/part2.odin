@@ -1,6 +1,6 @@
 package day5
 
-import "core:slice"
+import "core:fmt"
 import "core:strings"
 import "src:day2"
 
@@ -33,6 +33,7 @@ parse_and_count_ranges_IDs :: proc(
 
 	for r in rs {
 		for i in r[0] ..= r[1] {
+			fmt.printfln("i %v", i)
 			ids[i] = struct{}{}
 		}
 	}
