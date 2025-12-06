@@ -3,20 +3,9 @@ package day4_test
 import "core:testing"
 import "src:day4"
 
-// ..xx.xx@x.
-// x@@.@.@.@@
-// @@@@@.x.@@
-// @.@@@@..@.
-// x@.@@@@.@x
-// .@@@@@@@.@
-// .@.@.@.@@@
-// x.@@@.@@@@
-// .@@@@@@@@.
-// x.x.@@@.x.
-
 @(test)
 full :: proc(t: ^testing.T) {
-	got, err := day4.count_accessible_paper_rolls(
+	got := day4.count_accessible_paper_rolls(
 		`
 ..@@.@@@@.
 @@@.@.@.@@
@@ -30,7 +19,6 @@ full :: proc(t: ^testing.T) {
 @.@.@@@.@.`,
 	)
 
-	testing.expectf(t, err == nil, "got err %v; want nil", err)
 	testing.expect_value(t, got, 13)
 }
 
@@ -62,8 +50,7 @@ count_accessible_paper_rolls :: proc(t: ^testing.T) {
 	}
 
 	for tt in tests {
-		got, err := day4.count_accessible_paper_rolls(tt.input)
-		testing.expectf(t, err == nil, "got err %v; want nil", err)
+		got := day4.count_accessible_paper_rolls(tt.input)
 		testing.expectf(t, got == tt.want, "input %q: got %d; want %d", tt.input, got, tt.want)
 	}
 }

@@ -1,13 +1,10 @@
 package day4
 
-import "core:slice"
 import "core:strings"
 
 MAX_ADJACENT_ROLLS :: 3
 
-Error :: enum {}
-
-count_accessible_paper_rolls :: proc(input: string) -> (int, Error) {
+count_accessible_paper_rolls :: proc(input: string) -> int {
 	s := strings.trim_space(input)
 	n := 0
 	line_len := strings.index_byte(s, '\n')
@@ -20,14 +17,8 @@ count_accessible_paper_rolls :: proc(input: string) -> (int, Error) {
 
 		n += cast(int)is_accessible(s, i, line_len)
 	}
-	// n += cast(int)is_accessible(s, 1)
-	// n += cast(int)is_accessible(s, 2)
-	// // skip \n
-	// n += cast(int)is_accessible(s, 4)
-	// // skip .
-	// n += cast(int)is_accessible(s, 6)
 
-	return n, nil
+	return n
 }
 
 is_accessible :: proc(s: string, cur_i: int, line_len: int) -> bool {
