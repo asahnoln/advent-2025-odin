@@ -1,5 +1,6 @@
 package day6_test
 
+import "core:slice"
 import "core:testing"
 import "src:day6"
 
@@ -26,7 +27,7 @@ apply_math :: proc(t: ^testing.T) {
 		want: int,
 	} {
 		{{328, 64, 98}, .Plus, 490}, //
-		{{123, 45, 6}, .Mul, 33210},
+		{{123, 45, 6}, .Prod, 33210},
 	}
 
 	for tt in tests {
@@ -52,7 +53,7 @@ char_to_op :: proc(t: ^testing.T) {
 		wantErr: day6.Char_To_Op_Error,
 	} {
 		{'+', .Plus, nil}, //
-		{'*', .Mul, nil},
+		{'*', .Prod, nil},
 		{'a', nil, day6.Conversion_Error{input = 'a'}},
 	}
 
@@ -68,5 +69,69 @@ char_to_op :: proc(t: ^testing.T) {
 			tt.wantErr,
 		)
 		testing.expectf(t, got == tt.want, "char %v: got %v; want %v", tt.char, got, tt.want)
+	}
+}
+
+@(test)
+apply_math_to_doc :: proc(t: ^testing.T) {
+	tests := []struct {
+		input: string,
+		want:  []int,
+	} {
+		{`123
+45
+6
+*`, []int{33210}}, //
+		{`123 1
+45 2
+6 3
+* +`, []int{33210, 6}},
+	}
+
+	for tt in tests {
+		got, err := day6.apply_math_to_doc(tt.input)
+		defer delete(got)
+
+		testing.expectf(t, err == nil, "input %q: got err %v; want nil", tt.input, err)
+		testing.expectf(
+			t,
+			slice.equal(got, tt.want),
+			"input: %q: got %v; want %v",
+			tt.input,
+			got,
+			tt.want,
+		)
+	}
+}
+
+@(test)
+parse_doc :: proc(t: ^testing.T) {
+	tests := []struct {
+		input: string,
+		want:  []int,
+	} {
+		{`123
+45
+6
+*`, []int{33210}}, //
+		// 		{`123 1
+		// 45 2
+		// 6 3
+		// * +`, []int{33210, 6}},
+	}
+
+	for tt in tests {
+		got, err := day6.apply_math_to_doc_simpler(tt.input)
+		defer delete(got)
+
+		testing.expectf(t, err == nil, "input %q: got err %v; want nil", tt.input, err)
+		testing.expectf(
+			t,
+			slice.equal(got, tt.want),
+			"input: %q: got %v; want %v",
+			tt.input,
+			got,
+			tt.want,
+		)
 	}
 }
