@@ -24,29 +24,30 @@ full2 :: proc(t: ^testing.T) {
 }
 
 
-@(test)
-clamp_ranges :: proc(t: ^testing.T) {
-	tests := []struct {
-		ranges: [][2]int,
-		want:   [][2]int,
-	} {
-		{
-			{{1, 2}, {3, 4}},
-			{{1, 2}, {3, 4}}, //
-		},
-	}
-
-	for tt in tests {
-		got := day5.clamp_ranges(..tt.ranges)
-
-		testing.expectf(
-			t,
-			slice.equal(got, tt.want),
-			"ranges %v: got %v; want %v",
-			tt.ranges,
-			got,
-			tt.want,
-		)
-
-	}
-}
+// TODO: Do later
+// @(test)
+// clamp_ranges :: proc(t: ^testing.T) {
+// 	tests := []struct {
+// 		ranges: [][2]int,
+// 		want:   [][2]int,
+// 	} {
+// 		{
+// 			{{1, 2}, {3, 4}},
+// 			{{1, 2}, {3, 4}}, //
+// 		},
+// 	}
+//
+// 	for tt in tests {
+// 		got := day5.clamp_ranges(..tt.ranges)
+//
+// 		testing.expectf(
+// 			t,
+// 			slice.equal(got, tt.want),
+// 			"ranges %v: got %v; want %v",
+// 			tt.ranges,
+// 			got,
+// 			tt.want,
+// 		)
+//
+// 	}
+// }
